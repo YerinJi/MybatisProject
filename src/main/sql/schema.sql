@@ -28,6 +28,6 @@ CREATE TABLE enrollment (
                                 REFERENCES course(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-- - 추천 인덱스
+-- 추천 인덱스
 CREATE INDEX idx_student_name ON student(name);
 CREATE INDEX idx_course_title ON course(title);

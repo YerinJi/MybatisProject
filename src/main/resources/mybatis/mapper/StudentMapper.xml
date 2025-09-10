@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.multi.mapper.StudentMapper">
+    <resultMap id="StudentMap" type="com.multi.dto.StudentDTO">
+        <id property="id" column="id"/>
+        <result property="studentNo" column="student_no"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="dept" column="dept"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="getAllStudents" resultMap="StudentMap">
+        SELECT id, student_no, name, email, dept, created_at
+        FROM student
+        <where>
+            <if test="q != null and q != ''">
+                (name LIKE CONCAT('%', #{q}, '%')
+                OR student_no LIKE CONCAT('%', #{q}, '%'))
+            </if>
+        </where>
+        ORDER BY id
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="getStudentById" resultMap="StudentMap">
+        SELECT id, student_no, name, email, dept, created_at
+        FROM student
+
+    </select>
+
+    <select id="count" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM student
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                (name LIKE CONCAT('%', #{_parameter}, '%')
+                OR student_no LIKE CONCAT('%', #{_parameter}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertStudents" parameterType="com.multi.dto.StudentDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student (student_no, name, email, dept)
+        VALUES (#{studentNo}, #{name}, #{email}, #{dept})
+    </insert>
+
+    <update id="updateStudents" parameterType="com.multi.dto.StudentDTO">
+        UPDATE student
+        SET student_no = #{studentNo}, name = #{name}, email = #{email}, dept=#{dept}
+        WHERE id =#{id}
+    </update>
+
+    <delete id="deleteStudents" parameterType="int">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+
+</mapper>
