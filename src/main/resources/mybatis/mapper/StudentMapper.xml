@@ -27,7 +27,7 @@
     <select id="getStudentById" resultMap="StudentMap">
         SELECT id, student_no, name, email, dept, created_at
         FROM student
-
+        WHERE id = #{id}
     </select>
 
     <select id="count" parameterType="string" resultType="int">
