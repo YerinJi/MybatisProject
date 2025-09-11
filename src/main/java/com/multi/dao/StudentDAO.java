@@ -18,22 +18,22 @@ public class StudentDAO {
     }
     public StudentDTO getStudentById(int id){
         try(SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession()){
-            return s.selectOne("com.multi.dao.StudentMapper.getStudentById", id);
+            return s.selectOne("com.multi.mapper.StudentMapper.getStudentById", id);
         }
     }
     public int insertStudent(StudentDTO student){
         try(SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession(true)){
-            return s.insert("com.multi.dao.StudentMapper.insertStudent", student);
+            return s.insert("com.multi.mapper.StudentMapper.insertStudents", student);
         }
     }
     public int updateStudent(StudentDTO student){
         try(SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession(true)){
-            return s.update("com.multi.dao.StudentMapper.updateStudent", student);
+            return s.update("com.multi.mapper.StudentMapper.updateStudents", student);
         }
     }
     public int deleteStudent(int id){
         try(SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession(true)){
-            return s.delete("com.multi.dao.StudentMapper.deleteStudent", id);
+            return s.delete("com.multi.mapper.StudentMapper.deleteStudents", id);
         }
     }
     public int count(String q) {
