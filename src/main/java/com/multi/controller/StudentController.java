@@ -36,9 +36,9 @@ public class StudentController extends HttpServlet {
                 studentNewForm(req,resp);
                 break;
             default:
-                if(path.matches("^\\d+$")){
+                if(path.matches("/\\d+$")){
                     studentDetail(req,resp, path);
-                } else if(path.matches("^\\d+/edit$")){
+                } else if(path.matches("/\\d+/edit$")){
                     studentEditForm(req,resp);
                 } else{
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -50,7 +50,21 @@ public class StudentController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        resp.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        String path = req.getPathInfo();
+
+        switch(path){
+            case "/new":
+                insertStudent(req,resp);
+                break;
+            default:
+                if(path.matches("/\\d+/edit$")){
+                    updateStudent(req,resp,path);
+                }
+        }
+
+
     }
 
     private void studentList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -72,17 +86,18 @@ public class StudentController extends HttpServlet {
         List<StudentDTO> items = studentDAO.getAllStudents(q, size, offset);
         req.setAttribute("page", new Page<>(items, page, size, total, totalPages));
         req.setAttribute("q", q);
-        view(req, resp, "student/list");
+        view(req, resp, "students/list");
     }
 
     private void studentNewForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        view(req, resp, "student/form");
+        view(req, resp, "students/form");
     }
     private void studentEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+        int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
         StudentDTO s = studentDAO.getStudentById(id);
-        studentDAO.updateStudent(s);
-        view(req, resp, "student/form?mode=edit");
+        req.setAttribute("student", s);
+        req.setAttribute("mode","edit");
+        view(req, resp, "students/form");
     }
     private void studentDetail(HttpServletRequest req, HttpServletResponse resp, String path) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
@@ -91,7 +106,7 @@ public class StudentController extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
         req.setAttribute("student", s);
-        view(req, resp, "student/detail");
+        view(req, resp, "students/detail");
     }
 
     public static class Page<T> {
@@ -115,5 +130,36 @@ public class StudentController extends HttpServlet {
         public int getTotal()                    { return total; }
         public int getTotalPages()               { return totalPages; }
     }
+
+//    POST
+    public void insertStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String studentNo =  req.getParameter("studentNo");
+        String name = req.getParameter("name");
+        String dept = req.getParameter("dept");
+        String email =  req.getParameter("email");
+        StudentDTO  studentDTO = new StudentDTO();
+        studentDTO.setStudentNo(studentNo);
+        studentDTO.setName(name);
+        studentDTO.setEmail(email);
+        studentDTO.setDept(dept);
+
+        studentDAO.insertStudent(studentDTO);
+        resp.sendRedirect("/students");
+
+    }
+
+    private void updateStudent(HttpServletRequest req, HttpServletResponse resp, String path) throws IOException {
+        int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
+        StudentDTO s = new StudentDTO();
+        s.setId(id);
+        s.setStudentNo(req.getParameter("studentNo"));
+        s.setName(req.getParameter("name"));
+        s.setEmail(req.getParameter("email"));
+        s.setDept(req.getParameter("dept"));
+
+        studentDAO.updateStudent(s);
+        resp.sendRedirect("/students");
+    }
+
 
 }
