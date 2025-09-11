@@ -16,6 +16,7 @@ public class MyBatisUtil {
             throw new RuntimeException("Error initializing sqlSessionFactory: " + e.getMessage(),e);
         }
     }
+
     public static SqlSessionFactory getSqlSessionFactory() {
         return sqlSessionFactory;
     }

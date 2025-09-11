@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">Univ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample" aria-controls="navbarsExample" aria-expanded="false" aria-label="Toggle navigation">
