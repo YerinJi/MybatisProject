@@ -24,6 +24,8 @@
 
     <mappers>
         <mapper resource="mybatis/mapper/StudentMapper.xml"/>
+        <mapper resource="mybatis/mapper/CourseMapper.xml"/>
+        <mapper resource="mybatis/mapper/EnrollmentMapper.xml"/>
     </mappers>
     
 </configuration>
