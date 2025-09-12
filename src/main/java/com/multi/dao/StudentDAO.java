@@ -1,7 +1,9 @@
 package com.multi.dao;
 
 import com.multi.config.MyBatisUtil;
+import com.multi.dto.CourseDTO;
 import com.multi.dto.StudentDTO;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -39,6 +41,12 @@ public class StudentDAO {
     public int count(String q) {
         try (SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession()) {
             return s.selectOne("com.multi.mapper.StudentMapper.count", q);
+        }
+    }
+
+    public List<StudentDTO> findStudentsByCourseId(int courseId){
+        try(SqlSession s = MyBatisUtil.getSqlSessionFactory().openSession()){
+            return s.selectList("com.multi.mapper.StudentMapper.findStudentsByCourseId", courseId);
         }
     }
 }
