@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.mapper.EnrollmentMapper">
+    <resultMap id="EnrollmentMap" type="com.multi.dto.EnrollmentDTO">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="enrolledAt" column="enrolled_at"/>
+    </resultMap>
+<!-- 수강신청 (학생 수강강좌에 추가) -->
+    <insert id="insert" parameterType="com.multi.dto.EnrollmentDTO">
+        INSERT INTO enrollment (student_id,course_id)
+        VALUES (#{studentId},#{courseId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM enrollment
+        WHERE student_id = #{studentId} AND course_id = #{courseId}
+    </delete>
+
+</mapper>
