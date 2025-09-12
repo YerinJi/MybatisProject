@@ -1,19 +1,48 @@
 plugins {
     id 'java'
-    id 'war'
+    id 'war' // JSP/서블릿 WAR 배포면 필요
 }
 
 group = 'com.multi'
 version = '1.0.0'
-sourceCompatibility = '11'
 
-repositories { mavenCentral() }
-
-dependencies {
-    implementation 'javax.servlet:jstl:1.2'
-    // 로그(간단)
-
+repositories {
+    mavenCentral()
 }
 
-war { archiveFileName = 'jsp-mybatis-crud.war' }
+dependencies {
+    // 톰캣이 제공하므로 패키징하지 않도록 compileOnly
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'javax.servlet:jstl:1.2'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1' // 서블릿 필수
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'javax.el:javax.el-api:3.0.0' // Expression Language
+    implementation 'org.glassfish:javax.el:3.0.0' // EL 구현체
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'org.mybatis:mybatis:3.5.15'//추가 0903
+    implementation 'mysql:mysql-connector-java:8.0.30'//jdbc드라이브 연결
+    compileOnly 'org.projectlombok:lombok:1.18.26'
 
+    implementation 'org.aspectj:aspectjrt:1.9.22'
+    runtimeOnly  'org.aspectj:aspectjweaver:1.9.22'
+    implementation 'org.springframework:spring-aop:5.3.30'
+    // 로그(간단)
+    implementation 'org.slf4j:slf4j-simple:2.0.13'//추가0903
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.springframework:spring-context:5.3.30'
+    implementation 'org.springframework:spring-webmvc:5.3.30'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'//Resource
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // JDK 17 권장
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}
