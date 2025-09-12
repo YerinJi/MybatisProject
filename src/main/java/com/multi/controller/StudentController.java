@@ -61,6 +61,8 @@ public class StudentController extends HttpServlet {
             default:
                 if(path.matches("/\\d+/edit$")){
                     updateStudent(req,resp,path);
+                } else if(path.matches("/\\d+/delete$")){
+                    deleteStudent(req,resp,path);
                 }
         }
 
@@ -131,7 +133,7 @@ public class StudentController extends HttpServlet {
         public int getTotalPages()               { return totalPages; }
     }
 
-//    POST
+    //    POST
     public void insertStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String studentNo =  req.getParameter("studentNo");
         String name = req.getParameter("name");
@@ -158,6 +160,12 @@ public class StudentController extends HttpServlet {
         s.setDept(req.getParameter("dept"));
 
         studentDAO.updateStudent(s);
+        resp.sendRedirect("/students");
+    }
+
+    private void deleteStudent(HttpServletRequest req, HttpServletResponse resp, String path) throws IOException {
+        int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
+        studentDAO.deleteStudent(id);
         resp.sendRedirect("/students");
     }
 
