@@ -68,18 +68,6 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="syllabusUrl">강의계획서 링크 (선택)</label>
-      <input id="syllabusUrl" name="syllabusUrl" value="${course.syllabusUrl}" type="url" class="form-control"
-             placeholder="https://...">
-    </div>
-
-    <div class="form-group">
-      <label for="description">비고/소개 (선택)</label>
-      <textarea id="description" name="description" rows="4" class="form-control"
-                placeholder="강좌 개요, 평가 방식 등">${course.description}</textarea>
-    </div>
-
     <div class="text-right">
       <a href="${pageContext.request.contextPath}/courses" class="btn btn-secondary">취소</a>
       <button class="btn btn-primary" type="submit">${mode == 'edit' ? '수정' : '등록'}</button>

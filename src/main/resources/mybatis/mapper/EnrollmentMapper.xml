@@ -10,9 +10,10 @@
     </resultMap>
 <!-- 수강신청 (학생 수강강좌에 추가) -->
     <insert id="insert" parameterType="com.multi.dto.EnrollmentDTO">
-        INSERT INTO enrollment (student_id,course_id)
-        VALUES (#{studentId},#{courseId})
+        INSERT IGNORE INTO enrollment (student_id, course_id)
+        VALUES (#{studentId}, #{courseId})
     </insert>
+
 
     <delete id="delete" parameterType="int">
         DELETE FROM enrollment

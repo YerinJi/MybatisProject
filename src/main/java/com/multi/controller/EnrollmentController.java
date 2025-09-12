@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(urlPatterns = {"/enrollments","/enrollments/*"})
 public class EnrollmentController extends HttpServlet {
@@ -47,8 +49,10 @@ public class EnrollmentController extends HttpServlet {
         enrollmentDTO.setStudentId(studentId);
         enrollmentDTO.setCourseId(courseId);
 
-        enrollmentDAO.insert(enrollmentDTO);
-        resp.sendRedirect(req.getContextPath() + "/students/" + studentId);
+        int rows = enrollmentDAO.insert(enrollmentDTO);
+        String msg = (rows == 1) ? "수강신청 완료" : "이미 수강신청된 강좌입니다.";
+        String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        resp.sendRedirect(req.getContextPath() + "/students/" + studentId + "?msg=" + encodedMsg);
         return;
     }
 

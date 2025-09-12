@@ -19,22 +19,51 @@
         WHERE e.student_id = #{id}
         ORDER BY c.id DESC
     </select>
+    <insert id="insertCourse" parameterType="com.multi.dto.CourseDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO course (code, title, professor, credit)
+        VALUES (#{code}, #{title}, #{professor}, #{credit})
+    </insert>
+    <update id="updateCourse" parameterType="com.multi.dto.CourseDTO">
+        UPDATE course
+        SET code = #{code}, title = #{title}, professor = #{professor}, credit=#{credit}
+        WHERE id =#{id}
+    </update>
 
-    <!-- 전체 강좌목록 (수강신청) -->
+    <delete id="deleteCourse" parameterType="int">
+        DELETE FROM course WHERE id = #{id}
+    </delete>
+
+
+    <!-- 전체 강좌목록-->
     <select id="findAllCourse" resultType="com.multi.dto.CourseDTO">
+        SELECT id, code, title, professor, credit
+        FROM course
+        <where>
+            <if test="q != null and q != ''">
+                (title LIKE CONCAT('%', #{q}, '%')
+                OR code  LIKE CONCAT('%', #{q}, '%'))
+            </if>
+        </where>
+        ORDER BY id
+        LIMIT #{size} OFFSET #{offset}
+
+    </select>
+
+    <select id="count" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM course
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                (title LIKE CONCAT('%', #{_parameter}, '%')
+                OR code LIKE CONCAT('%', #{_parameter}, '%'))
+            </if>
+        </where>
+    </select>
+
+<!--    강좌목록 - 페이징 -->
+    <select id="findAll" parameterType="map" resultType="com.multi.dto.CourseDTO">
         SELECT id, code, title, professor, created_at,credit
         FROM course
     </select>
-
-    <!-- 강좌 상세보기-->
-    <select id="findCourse" parameterType="int" resultType="com.multi.dto.CourseDTO">
-        SELECT id, code, title, professor, enrolled_at
-        FROM course
-        WHERE id = #{id}
-    </select>
-
-    <!-- 강좌 목록 -> 수강자 목록-->
-
-
 
 </mapper>
