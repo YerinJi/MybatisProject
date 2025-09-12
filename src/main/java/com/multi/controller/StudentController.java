@@ -1,5 +1,6 @@
 package com.multi.controller;
 
+import com.multi.dao.CourseDAO;
 import com.multi.dao.StudentDAO;
 import com.multi.dto.StudentDTO;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/students","/students/*"})
 public class StudentController extends HttpServlet {
     private final StudentDAO studentDAO = new StudentDAO();
+    private final CourseDAO courseDAO = new CourseDAO();
 
     private void view(HttpServletRequest req, HttpServletResponse resp, String jsp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/views/" + jsp + ".jsp").forward(req, resp);
@@ -67,7 +69,6 @@ public class StudentController extends HttpServlet {
                 }
         }
 
-
     }
 
     private void studentList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -106,6 +107,8 @@ public class StudentController extends HttpServlet {
         int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
         var s = studentDAO.getStudentById(id);
         req.setAttribute("student", s);
+        req.setAttribute("enrolledCourses",courseDAO.findByStudentId(id));
+        req.setAttribute("availableCourses",courseDAO.findAllCourse());
         view(req, resp, "students/detail");
     }
 
@@ -145,6 +148,7 @@ public class StudentController extends HttpServlet {
 
         studentDAO.insertStudent(studentDTO);
         resp.sendRedirect("/students");
+        return;
 
     }
 
@@ -159,12 +163,14 @@ public class StudentController extends HttpServlet {
 
         studentDAO.updateStudent(s);
         resp.sendRedirect("/students");
+        return;
     }
 
     private void deleteStudent(HttpServletRequest req, HttpServletResponse resp, String path) throws IOException {
         int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
         studentDAO.deleteStudent(id);
         resp.sendRedirect("/students");
+        return;
     }
 
 
