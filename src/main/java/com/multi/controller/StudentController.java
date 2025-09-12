@@ -22,6 +22,7 @@ public class StudentController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html;charset=UTF-8");
         String path = req.getPathInfo();
 
         if (path == null) {
@@ -102,11 +103,8 @@ public class StudentController extends HttpServlet {
         view(req, resp, "students/form");
     }
     private void studentDetail(HttpServletRequest req, HttpServletResponse resp, String path) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+        int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
         var s = studentDAO.getStudentById(id);
-        if(s == null){
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
         req.setAttribute("student", s);
         view(req, resp, "students/detail");
     }
