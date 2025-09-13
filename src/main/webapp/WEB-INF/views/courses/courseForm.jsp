@@ -19,7 +19,6 @@
   </c:if>
 
   <form method="post" action="${action}">
-    <!-- edit 시 id 전달이 필요하면 hidden으로 포함 -->
     <c:if test="${mode == 'edit'}">
       <input type="hidden" name="id" value="${course.id}">
     </c:if>
@@ -49,23 +48,11 @@
         <input id="credit" name="credit" value="${course.credit}" type="number" min="0" max="6" step="1"
                class="form-control" required>
       </div>
-      <div class="form-group col-md-3">
-        <label for="capacity">정원</label>
-        <input id="capacity" name="capacity" value="${course.capacity}" type="number" min="0" step="1"
-               class="form-control">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="room">강의실</label>
-        <input id="room" name="room" value="${course.room}" class="form-control" placeholder="예: 공학관 301">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="schedule">시간표</label>
-        <input id="schedule" name="schedule" value="${course.schedule}" class="form-control"
-               placeholder="예: 월/수 10:30–12:00">
-      </div>
+<%--      <div class="form-group col-md-3">--%>
+<%--        <label for="capacity">정원</label>--%>
+<%--        <input id="capacity" name="capacity" value="${course.capacity}" type="number" min="0" step="1"--%>
+<%--               class="form-control">--%>
+<%--      </div>--%>
     </div>
 
     <div class="text-right">

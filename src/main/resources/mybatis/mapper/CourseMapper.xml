@@ -66,4 +66,10 @@
         FROM course
     </select>
 
+    <select id="findCourse" parameterType="int" resultType="com.multi.dto.CourseDTO">
+        SELECT id, code, title, professor, credit
+        FROM course
+        WHERE id = #{id}
+    </select>
+
 </mapper>

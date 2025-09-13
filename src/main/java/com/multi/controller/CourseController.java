@@ -31,10 +31,7 @@ public class CourseController extends HttpServlet {
         if(path==null){
             path="/";
         }
-        if(path.matches("/\\d+$")){
-            studentsByCourseId(req,resp);
-            return;
-        }
+
         switch (path){
             case "/":
                 courseList(req,resp);
@@ -42,6 +39,12 @@ public class CourseController extends HttpServlet {
             case "/new":
                 courseNewForm(req,resp);
                 break;
+            default:
+                if(path.matches("/\\d+/edit$")){
+                    courseEditForm(req,resp,path);
+                } else if(path.matches("/\\d+$")){
+                studentsByCourseId(req,resp);
+            }
         }
     }
 
@@ -95,6 +98,13 @@ public class CourseController extends HttpServlet {
     private void courseNewForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         view(req, resp, "courses/courseForm");
     }
+    private void courseEditForm(HttpServletRequest req, HttpServletResponse resp, String path) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
+        CourseDTO courseDTO = courseDAO.findCourse(id);
+        req.setAttribute("course", courseDTO);
+        req.setAttribute("mode", "edit");
+        view(req, resp, "courses/courseForm");
+    }
 
 //    post
 
@@ -118,6 +128,7 @@ public class CourseController extends HttpServlet {
         int id = Integer.parseInt(req.getPathInfo().split("/")[1]);
         CourseDTO c = new CourseDTO();
         c.setId(id);
+        c.setCode(req.getParameter("code"));
         c.setTitle(req.getParameter("title"));
         c.setProfessor(req.getParameter("professor"));
         c.setCredit(Integer.parseInt(req.getParameter("credit")));
